@@ -6,7 +6,7 @@
 #    By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/22 14:51:03 by hbouillo          #+#    #+#              #
-#    Updated: 2017/12/04 22:11:15 by hbouillo         ###   ########.fr        #
+#    Updated: 2017/12/30 21:10:16 by hbouillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ INCS_DIR = inc
 
 DMEM = src/mem/
 DOUT = src/out/
+DIN = src/in/
 DSTR = src/str/
 DUTIL = src/util/
 DXTOABASE = src/util/xtoabase/
@@ -44,6 +45,8 @@ DXTOABASE = src/util/xtoabase/
 SMEM =  ft_bzero.c ft_memadr.c ft_memalloc.c ft_memccpy.c \
 		ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memdel.c \
 		ft_memmove.c ft_memset.c \
+
+SIN  =  ft_gnl.c
 
 SOUT =  ft_putchar.c ft_putchar_fd.c ft_putendl.c \
 		ft_putendl_fd.c ft_putnbr.c ft_putnbr_fd.c ft_putstr.c \
@@ -66,11 +69,12 @@ SSTR =  ft_strcat.c ft_strchr.c ft_strclr.c ft_strcmp.c \
 		ft_strncat.c ft_strncmp.c ft_strncpy.c ft_strnequ.c \
 		ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strsplit.c \
 		ft_strssplit.c ft_strstr.c ft_strsub.c ft_strtrim.c \
+		ft_strfjoin.c
 
 SUTIL =	ft_atoi.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
 		ft_isdigit.c ft_islower.c ft_isprint.c \
 		ft_isupper.c ft_itoa.c ft_nbrmax.c ft_nbrmin.c ft_tolower.c \
-		ft_toupper.c \
+		ft_toupper.c ft_chartablen.c ft_chartabfree.c \
 
 SXTOABASE = ft_itoabase.c ft_uitoabase.c ft_ctoabase.c ft_uctoabase.c \
 		ft_stoabase.c ft_ustoabase.c ft_ltoabase.c ft_ultoabase.c \
@@ -80,6 +84,7 @@ SXTOABASE = ft_itoabase.c ft_uitoabase.c ft_ctoabase.c ft_uctoabase.c \
 OMEM = $(addprefix $(DMEM), $(SMEM:.c=.o))
 OSTR = $(addprefix $(DSTR), $(SSTR:.c=.o))
 OOUT = $(addprefix $(DOUT), $(SOUT:.c=.o))
+OIN = $(addprefix $(DIN), $(SIN:.c=.o))
 OUTIL = $(addprefix $(DUTIL), $(SUTIL:.c=.o))
 OXTOABASE = $(addprefix $(DXTOABASE), $(SXTOABASE:.c=.o))
 
@@ -120,11 +125,11 @@ $(NAME)-precompil:
 $(NAME)-endcompil:
 	@echo $(END_MSG)
 
-$(NAME): $(OMEM) $(OSTR) $(OOUT) $(OUTIL) $(OXTOABASE)
+$(NAME): $(OMEM) $(OSTR) $(OOUT) $(OUTIL) $(OXTOABASE) $(OIN)
 ifeq ($(MODE),DEBUG)
 	@echo "\tArchiving $(STL_BOLD)$(RGB_LRED)$@$(RGB_RESET)..."
 endif
-	@ar rc $(NAME) $(OMEM) $(OSTR) $(OOUT) $(OUTIL) $(OXTOABASE)
+	@ar rc $(NAME) $(OMEM) $(OSTR) $(OOUT) $(OUTIL) $(OXTOABASE) $(OIN)
 ifeq ($(MODE),DEBUG)
 	@echo "\tIndexing  $(STL_BOLD)$(RGB_LRED)$@$(RGB_RESET)..."
 endif
@@ -152,6 +157,10 @@ ifeq ($(MODE),DEBUG)
 	@echo "\tCleaning $(STL_BOLD)$(RGB_LBLUE)out$(RGB_RESET)..."
 endif
 	@/bin/rm -f $(OOUT)
+ifeq ($(MODE),DEBUG)
+	@echo "\tCleaning $(STL_BOLD)$(RGB_LBLUE)in$(RGB_RESET)..."
+endif
+	@/bin/rm -f $(OIN)
 ifeq ($(MODE),DEBUG)
 	@echo "\tCleaning $(STL_BOLD)$(RGB_LBLUE)util$(RGB_RESET)..."
 endif
