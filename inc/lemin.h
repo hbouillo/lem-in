@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/03 05:37:39 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/01/04 00:14:39 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,17 @@
 # include "libft.h"
 # include <stdlib.h>
 
-# define ERR_NO_START_NODE 10
-# define ERR_NO_END_NODE 11
-# define ERR_NEG_OR_NUL_ANTS 12
-# define ERR_ROOM_ALREADY_EXISTS 13
-# define ERR_TUBE_UNKNOWN_ROOM 14
-# define ERR_FORMAT_UNKNOWN 20
-# define ERR_FORMAT_ROOM 21
-# define ERR_FORMAT_TUBE 22
+# define ERR_NO_START_NODE 10,"No entry node has been specified."
+# define ERR_NO_END_NODE 11,"No exit node has been specified"
+# define ERR_NEG_OR_NUL_ANTS 12,"Negative or nul amount of ants."
+# define ERR_ISOLATED_ROOM 13,"At least one node is isolated"
+# define ERR_ROOM_ALREADY_EXISTS 14,"Node already exists."
+# define ERR_TUBE_UNKNOWN_ROOM 15,"Tube is trying to connect at least one unknown room."
+# define ERR_TUBE_SAME_ROOM_CONNECTION 16,"Tube is trying to connect a room with itself."
+# define ERR_TUBE_ALREADY_EXISTS 17,"Tube already exists."
+# define ERR_FORMAT_UNKNOWN 20,"Unknown line format."
+# define ERR_FORMAT_ROOM 21,"Unknown room line format."
+# define ERR_FORMAT_TUBE 22,"Unknown tube line format."
 
 # define TEST(X) ft_printf("Test %d\n", X)
 
@@ -87,7 +90,7 @@ typedef struct		s_cdata
 }					t_cdata;
 
 /*
-** Computing structures
+** Usable data structures
 */
 
 typedef struct		s_node
@@ -112,13 +115,17 @@ typedef struct		s_network
 ** Functions
 */
 
-void				error(int exitcode);
+void				error(int errcode, char const *const errmsg);
 
 t_data				*parse_data(void);
 int					*parse_room(char **split, t_data *data, t_cdata *cdata);
+int					*parse_tube(char **split, t_data *data, t_cdata *cdata);
 
 t_room				*find_room(char *name, t_data *data);
 
 t_network			*build_network(t_data *data);
+
+void				free_rlist(t_rlist *room);
+void				free_tlist(t_tlist *room);
 
 #endif

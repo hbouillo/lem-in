@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 03:59:29 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/03 05:11:21 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/01/03 20:03:10 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,14 @@ int				*parse_room(char **split, t_data *data, t_cdata *cdata)
 		data->end = room;
 	cdata->room_type = none;
 	return (0);
+}
+
+void			free_rlist(t_rlist *room)
+{
+	if (!room)
+		return ;
+	free_rlist(room->next);
+	free(room->room->name);
+	free(room->room);
+	free(room);
 }

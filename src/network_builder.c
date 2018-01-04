@@ -6,13 +6,13 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/03 06:18:51 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/01/04 05:14:48 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
 
-//TODO: ERRORS LIKE TUBE 0-0 OR TWICE SAME TUBE 91-0 and 0-1 is same tube)
+//TODO: ERRORS LIKE TUBE 0-0 OR TWICE SAME TUBE (1-0 and 0-1 is same tube)
 
 static int			build_nodes(t_network *network, t_data const *const data)
 {
@@ -60,10 +60,37 @@ static int			count_connections(char *name, t_tlist *tubes)
 	return (count);
 }
 
+static int			fill_connections(t_node *node, t_node **list_nodes, t_tlist *tlist)
+{
+	int				i;
+	t_node			**nodes_temp;
+
+	i = 0;
+	while (tlist)
+	{
+		if (ft_strequ(node->name, tlist->tube->room1->name) ||
+			ft_strequ(node->name, tlist->tube->room2->name))
+		{
+			nodes_temp = list_nodes;
+			while (*nodes_temp)
+			{
+				if (!ft_strequ((*nodes_temp)->name, node->name) &&
+					(ft_strequ((*nodes_temp)->name, tlist->tube->room1->name) ||
+					ft_strequ((*nodes_temp)->name, tlist->tube->room2->name)))
+				{
+					node->nodes[i++] = (*nodes_temp);
+				}
+				nodes_temp++;
+			}
+		}
+		tlist = tlist->next;
+	}
+	return (0);
+}
+
 static int			link_nodes(t_network *network, t_data const *const data)
 {
 	t_node			**nodes;
-	t_node			**nodes_temp;
 	t_tlist			*tlist;
 	int				i;
 
@@ -74,26 +101,7 @@ static int			link_nodes(t_network *network, t_data const *const data)
 		(*nodes)->connections = count_connections((*nodes)->name, tlist);
 		(*nodes)->nodes = (t_node **)ft_memalloc(sizeof(t_node *) * ((*nodes)->connections + 1));
 		(*nodes)->distances = (int *)ft_memalloc(sizeof(int) * ((*nodes)->connections + 1));
-		i = 0;
-		while (tlist)
-		{
-			if (ft_strequ((*nodes)->name, tlist->tube->room1->name) ||
-				ft_strequ((*nodes)->name, tlist->tube->room2->name))
-			{
-				nodes_temp = network->nodes;
-				while (*nodes_temp)
-				{
-					if (!ft_strequ((*nodes_temp)->name, (*nodes)->name) &&
-						(ft_strequ((*nodes_temp)->name, tlist->tube->room1->name) ||
-						ft_strequ((*nodes_temp)->name, tlist->tube->room2->name)))
-					{
-						(*nodes)->nodes[i++] = (*nodes_temp);
-					}
-					nodes_temp++;
-				}
-			}
-			tlist = tlist->next;
-		}
+		fill_connections(*nodes, network->nodes, tlist);
 		i = -1;
 		while (++i < (*nodes)->connections)
 			(*nodes)->distances[i] = 1;
@@ -105,11 +113,19 @@ static int			link_nodes(t_network *network, t_data const *const data)
 t_network			*build_network(t_data *data)
 {
 	t_network		*network;
+	t_node			**nodes_tmp;
 
 	network = (t_network *)ft_memalloc(sizeof(t_network));
 	network->units = data->ants;
 	build_nodes(network, data);
 	link_nodes(network, data);
+	nodes_tmp = network->nodes;
+	while (*nodes_tmp)
+	{
+		if (!(*nodes_tmp)->nodes)
+			error(ERR_ISOLATED_ROOM);
+		nodes_tmp++;
+	}
 	int nodes = 0;
 	while (network->nodes[nodes])
 	{

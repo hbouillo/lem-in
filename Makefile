@@ -6,7 +6,7 @@
 #    By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/22 14:51:03 by hbouillo          #+#    #+#              #
-#    Updated: 2018/01/03 04:56:09 by hbouillo         ###   ########.fr        #
+#    Updated: 2018/01/03 23:40:13 by hbouillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ INCS_DIR = inc
 
 DMAIN = src/
 
-SMAIN = lemin.c parser.c rooms.c network_builder.c
+SMAIN = lemin.c parser.c rooms.c tubes.c network_builder.c
 
 OMAIN = $(addprefix $(DMAIN), $(SMAIN:.c=.o))
 

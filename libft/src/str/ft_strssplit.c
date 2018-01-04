@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strssplit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbouillo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/10 20:28:31 by hbouillo          #+#    #+#             */
-/*   Updated: 2017/11/10 22:52:09 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/01/03 20:54:28 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ char		**ft_strssplit(const char *str, char *sep)
 		if (!(tab[--words] = ft_strsub(str, prev0, curr0 - prev0)))
 			return (NULL);
 	}
+	free(str0);
 	return (tab);
 }
