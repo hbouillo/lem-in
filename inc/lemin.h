@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/04 00:14:39 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/01/10 05:02:57 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define ERR_FORMAT_UNKNOWN 20,"Unknown line format."
 # define ERR_FORMAT_ROOM 21,"Unknown room line format."
 # define ERR_FORMAT_TUBE 22,"Unknown tube line format."
+
+# define ARG_VERBOSE 0
 
 # define TEST(X) ft_printf("Test %d\n", X)
 

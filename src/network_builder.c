@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/04 05:14:48 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/01/10 05:14:05 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,15 +129,18 @@ t_network			*build_network(t_data *data)
 	int nodes = 0;
 	while (network->nodes[nodes])
 	{
-		ft_printf("Node detected: Name(%s), Connections(%d)\n", network->nodes[nodes]->name, network->nodes[nodes]->connections);
+		if (get_arg(ARG_VERBOSE))
+			ft_printf("Node detected: Name(%s), Connections(%d)\n", network->nodes[nodes]->name, network->nodes[nodes]->connections);
 		int connection = 0;
 		while (network->nodes[nodes]->nodes[connection])
 		{
-			ft_printf("    Connects with: Name(%s)\n", network->nodes[nodes]->nodes[connection]->name);
+			if (get_arg(ARG_VERBOSE))
+				ft_printf("    Connects with: Name(%s)\n", network->nodes[nodes]->nodes[connection]->name);
 			connection++;
 		}
 		nodes++;
 	}
-	ft_printf("%d nodes detected in network. Node %s is entry. Node %s is exit.\n", nodes, network->entry->name, network->exit->name);
+	if (get_arg(ARG_VERBOSE))
+		ft_printf("%d nodes detected in network. Node %s is entry. Node %s is exit.\n", nodes, network->entry->name, network->exit->name);
 	return (network);
 }
