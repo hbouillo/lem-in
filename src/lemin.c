@@ -6,19 +6,28 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/10 05:13:07 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:15:12 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
 
-void			error(int errcode, char const *const errmsg)
+int					error(int errcode, char const *const errmsg, char *errtype,
+						int errexit)
 {
 	if (get_arg(ARG_VERBOSE))
-		ft_printf("Error (ERRCODE=%d, ERRMSG=\"%s\")\n", errcode, errmsg);
-	else
+	{
+		ft_printf("%rgb%s (ERRCODE=%d, ERRMSG=\"%s\")%0rgb\n",
+			errexit ? 0xff3835 : 0xf7ba2c, errtype, errcode, errmsg);
+		if (errexit)
+			exit(1);
+	}
+	else if (errexit)
+	{
 		ft_printf("ERROR\n");
-	exit(1);
+		exit(1);
+	}
+	return (1);
 }
 
 static void		free_data(t_data *data)
@@ -52,10 +61,13 @@ void			lemin(void)
 
 	data = parse_data();
 	if (!data->start)
-		error(ERR_NO_START_NODE);
+		error(ERR_NO_START_NODE, ERR_CRITICAL);
 	else if (!data->end)
-		error(ERR_NO_END_NODE);
+		error(ERR_NO_END_NODE, ERR_CRITICAL);
 	network = build_network(data);
+	verbose("%d nodes detected in network. Node %s is entry. Node %s \
+is exit.\n", network->nodes_count, network->entry->name, network->exit->name);
+	solve(network);
 	free_data(data);
 	free_network(network);
 }

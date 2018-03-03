@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/01/10 05:02:57 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 03:13:50 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@
 # define ERR_FORMAT_ROOM 21,"Unknown room line format."
 # define ERR_FORMAT_TUBE 22,"Unknown tube line format."
 
-# define ARG_VERBOSE 0
+# define ERR_CRITICAL "Error", 1
+# define ERR_WARNING "Warning", 0
 
-# define TEST(X) ft_printf("Test %d\n", X)
+# define ARG_VERBOSE 0
 
 /*
 ** Generic structures
@@ -113,19 +114,25 @@ typedef struct		s_network
 	t_node			*exit;
 }					t_network;
 
+typedef struct		s_path
+{
+	int				length;
+	char			**nodes;
+}					t_path;
+
 /*
 ** Functions
 */
 
-void				error(int errcode, char const *const errmsg);
+int					error(int errcode, char const *const errmsg, char *errtype,
+						int errexit);
+int					verbose(char *str, ...);
 
 t_data				*parse_data(void);
-int					*parse_room(char **split, t_data *data, t_cdata *cdata);
-int					*parse_tube(char **split, t_data *data, t_cdata *cdata);
-
-t_room				*find_room(char *name, t_data *data);
 
 t_network			*build_network(t_data *data);
+
+t_path				*solve(t_network *network);
 
 void				free_rlist(t_rlist *room);
 void				free_tlist(t_tlist *room);

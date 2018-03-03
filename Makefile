@@ -6,127 +6,67 @@
 #    By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/22 14:51:03 by hbouillo          #+#    #+#              #
-#    Updated: 2018/01/03 23:40:13 by hbouillo         ###   ########.fr        #
+#    Updated: 2018/03/03 03:10:53 by hbouillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# SHELL
-ZSH = /bin/zsh
-ifneq ("$(wildcard $(ZSH))","")
-SHELL = /bin/zsh
-endif
+include Makefile.inc
 
-# MAKING MODE
-ifneq ($(MODE),DEBUG)
-override MODE = NORMAL
-endif
-export MODE
+# COMPILATION VARIABLES
+CC = clang
 
-# CC VARIABLES
-CC = gcc
-ifeq ($(MODE),DEBUG)
-CFLAGS = -fsanitize=address
-LFLAGS = -fsanitize=address
-else
-CFLAGS = -Wall -Werror -Wextra
-LFLAGS =
-endif
+# TARGET 1
+TARGET_1 = lem-in
+SRC_1 = lemin.c verbose.c \
+	\
+	parser/network_builder.c parser/parser.c parser/rooms.c parser/tubes.c \
+	\
+	solver/solver.c
+OBJ_1 = $(addprefix obj/src/,$(SRC_1:.c=.o))
+CFLAGS_1 = $(DEBUG_FLAGS) \
+	-I$(LIBS_PATH)/include \
+	-I$(LIBS_PATH)/include/freetype2 \
+	-Iinc \
+	-Ilib/inc
+LFLAGS_1 = $(DEBUG_FLAGS) \
+	-L$(LIBS_PATH)/lib \
+	-Llib \
+	-lft
 
-# TARGET VARIABLES
-NAME = lem-in
-
-LIBFT = libft
-LIBS = $(LIBFT)/$(LIBFT).a
-
-INCS_DIR = inc
-
-DMAIN = src/
-
-SMAIN = lemin.c parser.c rooms.c tubes.c network_builder.c
-
-OMAIN = $(addprefix $(DMAIN), $(SMAIN:.c=.o))
-
-
-# STYLE VARIABLES
-STL_BOLD = \x1b[1m
-
-RGB_YELLOW = \x1b[38;2;239;196;23m
-RGB_LGREEN = \x1b[38;2;93;239;183m
-RGB_CYAN = \x1b[38;2;112;225;232m
-RGB_BLUE = \x1b[38;2;83;154;252m
-RGB_LBLUE = \x1b[38;2;147;204;252m
-RGB_LRED = \x1b[38;2;255;100;100m
-RGB_RESET = \x1b[0m
-
-ifeq ($(MODE),DEBUG)
-BGN_MSG = "$(STL_BOLD)$(RGB_YELLOW)⚠  Compiling $(RGB_LRED)$(NAME)\
-$(RGB_YELLOW)in $(RGB_LRED)$(MODE)$(RGB_YELLOW) mode. ⚠ $(RGB_RESET)"
-else
-BGN_MSG = "$(STL_BOLD)$(RGB_BLUE)⧖  Compiling $(RGB_CYAN)$(NAME)\
-$(RGB_BLUE)in $(RGB_CYAN)$(MODE)$(RGB_BLUE) mode. ⧖ $(RGB_RESET)"
-endif
-
-NOTHING_DONE = "$(STL_BOLD)$(RGB_LRED)✗  Nothing to be done for$(RGB_CYAN)\
-$(NAME)$(RGB_LRED). ✗$(RGB_RESET)"
-SOMETHING_DONE = "$(STL_BOLD)$(RGB_BLUE)✓  Compiled $(RGB_CYAN)$(NAME)\
-$(RGB_BLUE)successfully. ✓$(RGB_RESET)"
-
-
-END_MSG = $(NOTHING_DONE)
-
-all: $(NAME)-precompil $(NAME) $(NAME)-endcompil
+all: prebuild.$(TARGET_1) $(TARGET_1) postbuild.$(TARGET_1)
 	@echo > /dev/null
 
-$(NAME)-precompil:
-	@echo $(BGN_MSG)
+$(TARGET_1): $(OBJ_1)
+	$(call link, $(LFLAGS_1))
 
-$(NAME)-endcompil:
-	@echo $(END_MSG)
+prebuild.$(TARGET_1):
+	@mkdir -p lib
+	@mkdir -p lib/inc
+	@$(MAKE) -C libft
+	$(call dylib_install,./libft/lib/libft.dylib)
+	$(call dylib_include_install,./libft/inc)
+	$(call bgn_msg,$(TARGET_1))
 
-$(NAME): $(OMAIN)
-	@$(MAKE) -C $(LIBFT)
-ifeq ($(MODE),DEBUG)
-	@echo "\tLinking $(STL_BOLD)$(RGB_LRED)$@$(RGB_RESET)..."
-endif
-	@$(CC) $(CFLAGS) -o $(NAME) $(OMAIN) $(LIBS)
+postbuild.$(TARGET_1):
+	$(call $(END_MSG),$(TARGET_1))
 
-%.o: %.c
-ifeq ($(MODE),DEBUG)
-	@echo "\tCompiling $(STL_BOLD)$(RGB_LBLUE)$<$(RGB_RESET)..."
-endif
-	@$(CC) $(CFLAGS) -I$(INCS_DIR) -c $< -o $@
-	@$(eval END_MSG = $(SOMETHING_DONE))
+$(OBJ_1): ./obj/%.o: %.c
+	$(call compile, $(CFLAGS_1))
 
 clean:
-	@$(MAKE) -C $(LIBFT) clean
-	@echo "$(STL_BOLD)$(RGB_BLUE)⧖  Cleaning $(RGB_CYAN)$(NAME)\
-	$(RGB_BLUE) objs... ⧖$(RGB_RESET)"
-ifeq ($(MODE),DEBUG)
-	@echo "\tCleaning $(STL_BOLD)$(RGB_LBLUE)main$(RGB_RESET)..."
-endif
-	@/bin/rm -f $(OMAIN)
-	@echo "$(STL_BOLD)$(RGB_BLUE)✓  Cleaned $(RGB_CYAN)$(NAME)\
-	$(RGB_BLUE) objs successfully. ✓$(RGB_RESET)"
+	@$(MAKE) -C libft clean
+	$(call clean,$(TARGET_1),$(OBJ_1))
 
 fclean:
-	@$(MAKE) -C $(LIBFT) fclean
-	@echo "$(STL_BOLD)$(RGB_BLUE)⧖  Cleaning $(RGB_CYAN)$(NAME)\
-	$(RGB_BLUE) objs... ⧖$(RGB_RESET)"
-ifeq ($(MODE),DEBUG)
-	@echo "\tCleaning $(STL_BOLD)$(RGB_LBLUE)main$(RGB_RESET)..."
-endif
-	@/bin/rm -f $(OMAIN)
-	@echo "$(STL_BOLD)$(RGB_BLUE)✓  Cleaned $(RGB_CYAN)$(NAME)\
-	$(RGB_BLUE) objs successfully. ✓$(RGB_RESET)"
-	@echo "$(STL_BOLD)$(RGB_BLUE)⧖  Cleaning $(RGB_CYAN)$(NAME)\
-	$(RGB_BLUE) executable... ⧖$(RGB_RESET)"
-ifeq ($(MODE),DEBUG)
-	@echo "\tCleaning $(STL_BOLD)$(RGB_LRED)$(NAME)$(RGB_RESET)..."
-endif
-	@/bin/rm -f $(NAME)
-	@echo "$(STL_BOLD)$(RGB_BLUE)✓  Cleaned $(RGB_CYAN)$(NAME)\
-	$(RGB_BLUE) executable successfully. ✓$(RGB_RESET)"
+	@$(MAKE) -C libft fclean
+	$(call fclean,$(TARGET_1),$(OBJ_1))
+
+libclean:
+	@$(MAKE) -C libft libclean
+	@rm -rf ./lib
 
 re: fclean all
 
-.PHONY: all clean fclean $(NAME)-precompil $(NAME)-endcompil
+.PHONY: all clean fclean \
+	prebuild.$(TARGET_1) postbuild.$(TARGET_1) \
+	prebuild.$(TARGET_2) postbuild.$(TARGET_2)
