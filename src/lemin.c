@@ -6,13 +6,13 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 03:15:12 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:15:08 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
 
-int					error(int errcode, char const *const errmsg, char *errtype,
+int				error(int errcode, char const *const errmsg, char *errtype,
 						int errexit)
 {
 	if (get_arg(ARG_VERBOSE))
@@ -58,18 +58,28 @@ void			lemin(void)
 {
 	t_data		*data;
 	t_network	*network;
+	t_path		*path;
 
+	verbose("%rgbParsing...\n%0rgb", V_COLOR);
 	data = parse_data();
+	verbose("%rgbDone.\n%rgbChecking data...\n%0rgb", V_COLOR, V_COLOR);
 	if (!data->start)
 		error(ERR_NO_START_NODE, ERR_CRITICAL);
 	else if (!data->end)
 		error(ERR_NO_END_NODE, ERR_CRITICAL);
+	verbose("%rgbDone.\n%rgbBuilding network...\n%0rgb", V_COLOR, V_COLOR);
 	network = build_network(data);
+	verbose("%rgbDone.\n%0rgb", V_COLOR);
+	free_data(data);
 	verbose("%d nodes detected in network. Node %s is entry. Node %s \
 is exit.\n", network->nodes_count, network->entry->name, network->exit->name);
-	solve(network);
-	free_data(data);
+	verbose("%rgbSolving...\n%0rgb", V_COLOR);
+	path = solve(network);
+	verbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_network(network);
+	verbose_path(*path);
+	ft_llist_del(&path->nodes, &free);
+	free(path);
 }
 
 int				main(int argc, char **argv)
@@ -82,6 +92,5 @@ int				main(int argc, char **argv)
 	}
 	lemin();
 	destroy_args();
-	//while(1);
 	return (0);
 }

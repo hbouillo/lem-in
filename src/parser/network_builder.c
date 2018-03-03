@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 03:08:58 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:23:03 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,26 @@
 
 static int			build_nodes(t_network *network, t_data const *const data)
 {
-	int				nodescount;
+	int				nodecount;
 	t_rlist			*rooms;
 
-	nodescount = 0;
+	nodecount = -1;
 	rooms = data->rooms;
-	while (rooms)
-	{
-		nodescount++;
+	while (rooms && nodecount++ > (int)0x80000000)
 		rooms = rooms->next;
-	}
-	network->nodes = (t_node **)ft_memalloc(sizeof(t_node *) * (nodescount + 1));
-	network->nodes_count = nodescount;
+	network->nodes = (t_node **)ft_memalloc(sizeof(t_node *) * (nodecount + 1));
+	network->nodes_count = nodecount;
 	rooms = data->rooms;
-	while (nodescount--)
+	while (nodecount--)
 	{
-		network->nodes[nodescount] = (t_node *)ft_memalloc(sizeof(t_node));
-		network->nodes[nodescount]->name = ft_strdup(rooms->room->name);
-		network->nodes[nodescount]->pos = rooms->room->pos;
+		network->nodes[nodecount] = (t_node *)ft_memalloc(sizeof(t_node));
+		network->nodes[nodecount]->name = ft_strdup(rooms->room->name);
+		network->nodes[nodecount]->pos = rooms->room->pos;
 		if (ft_strequ(rooms->room->name, data->start->name))
-			network->entry = network->nodes[nodescount];
+			network->entry = network->nodes[nodecount];
 		else if (ft_strequ(rooms->room->name, data->end->name))
-			network->exit = network->nodes[nodescount];
+			network->exit = network->nodes[nodecount];
+		verbose("	Built node Name(%s).\n", network->nodes[nodecount]->name);
 		rooms = rooms->next;
 	}
 	return (0);
@@ -58,7 +56,8 @@ static int			count_connections(char *name, t_tlist *tubes)
 	return (count);
 }
 
-static int			fill_connections(t_node *node, t_node **list_nodes, t_tlist *tlist)
+static int			fill_connections(t_node *node, t_node **list_nodes,
+						t_tlist *tlist)
 {
 	int				i;
 	t_node			**nodes_temp;
@@ -97,12 +96,16 @@ static int			link_nodes(t_network *network, t_data const *const data)
 	{
 		tlist = data->tubes;
 		(*nodes)->connections = count_connections((*nodes)->name, tlist);
-		(*nodes)->nodes = (t_node **)ft_memalloc(sizeof(t_node *) * ((*nodes)->connections + 1));
-		(*nodes)->distances = (int *)ft_memalloc(sizeof(int) * ((*nodes)->connections + 1));
+		(*nodes)->nodes = (t_node **)ft_memalloc(
+			sizeof(t_node *) * ((*nodes)->connections + 1));
+		(*nodes)->distances = (int *)ft_memalloc(
+			sizeof(int) * ((*nodes)->connections + 1));
 		fill_connections(*nodes, network->nodes, tlist);
 		i = -1;
 		while (++i < (*nodes)->connections)
 			(*nodes)->distances[i] = 1;
+		verbose("	Linked node Name(%s) to %d nodes.\n",
+			(*nodes)->name, (*nodes)->connections);
 		nodes++;
 	}
 	return (0);

@@ -6,13 +6,18 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:54:41 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 03:14:05 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:04:24 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lemin.h"
+#include "solver.h"
 
 t_path			*solve(t_network *network)
 {
-	return (NULL);
+	t_path		*shortest_path;
+
+	if (!(shortest_path = (t_path *)ft_memalloc(sizeof(t_path))))
+		error(ERR_MALLOC, ERR_CRITICAL);
+	find_shortest_path(shortest_path, network);
+	return (shortest_path);
 }

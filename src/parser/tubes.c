@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 19:04:44 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 03:09:06 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:26:13 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,26 @@ static int		place_tube(t_tube *tube, t_data *data)
 	return (0);
 }
 
+static int		check_tube(t_tlist *tubes, t_tube *tube)
+{
+	while (tubes)
+	{
+		if ((ft_strequ(tubes->tube->room1->name, tube->room1->name) &&
+			ft_strequ(tubes->tube->room2->name, tube->room2->name)) ||
+			(ft_strequ(tubes->tube->room2->name, tube->room1->name) &&
+			ft_strequ(tubes->tube->room1->name, tube->room2->name)))
+		{
+			error(ERR_TUBE_ALREADY_EXISTS, ERR_WARNING); //TODO: Fin acquisition ?
+			return (1);
+		}
+		tubes = tubes->next;
+	}
+	return (0);
+}
+
 int				parse_tube(char **split, t_data *data, t_cdata *cdata)
 {
 	t_tube		*tube;
-	t_tlist		*tubes;
 
 	cdata = NULL;
 	tube = (t_tube *)malloc(sizeof(t_tube));
@@ -51,22 +67,11 @@ int				parse_tube(char **split, t_data *data, t_cdata *cdata)
 	}
 	if (ft_strequ(tube->room1->name, tube->room2->name))
 	{
-		error(ERR_TUBE_SAME_ROOM_CONNECTION, ERR_WARNING); //TODO: Fin acquisition ?
+		error(ERR_TUBE_SAME_ROOM, ERR_WARNING); //TODO: Fin acquisition ?
 		return (1);
 	}
-	tubes = data->tubes;
-	while (tubes)
-	{
-		if ((ft_strequ(tubes->tube->room1->name, tube->room1->name) &&
-			ft_strequ(tubes->tube->room2->name, tube->room2->name)) ||
-			(ft_strequ(tubes->tube->room2->name, tube->room1->name) &&
-			ft_strequ(tubes->tube->room1->name, tube->room2->name)))
-			{
-				error(ERR_TUBE_ALREADY_EXISTS, ERR_WARNING); //TODO: Fin acquisition ?
-				return (1);
-			}
-		tubes = tubes->next;
-	}
+	if (check_tube(data->tubes, tube))
+		return (1);
 	place_tube(tube, data);
 	return (0);
 }

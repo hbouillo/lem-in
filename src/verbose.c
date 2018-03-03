@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:16:39 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 02:28:22 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:51:12 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,20 @@ int				verbose(char *str, ...)
 	ft_printf("%0rgb");
 	va_end(args);
 	return (ret);
+}
+
+void			verbose_path(t_path path)
+{
+	t_llist		*nodes;
+
+	verbose("Path is [ ");
+	nodes = path.nodes;
+	while (nodes)
+	{
+		verbose("%s", (char *)nodes->data);
+		nodes = nodes->next;
+		if (nodes)
+			verbose(" - ");
+	}
+	verbose(" ]\n");
 }

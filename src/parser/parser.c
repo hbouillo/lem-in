@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:28:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 03:17:49 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 06:34:32 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void		parse_command(char *line, t_data *data, t_cdata *cdata)
 
 static int		parse_ants(int *parsed_ants, t_data *data, char *line)
 {
-	if (*parsed_ants)
+	if (*parsed_ants || *line == '#')
 		return (0);
 	verbose("ants\n");
 	data->ants = ft_atoi(line);
@@ -80,26 +80,25 @@ static int		parse_ants(int *parsed_ants, t_data *data, char *line)
 t_data			*parse_data(void)
 {
 	t_data		*data;
-	t_cdata		*cdata;
+	t_cdata		cdata;
 	int			parsed_ants;
 	char		*line;
 
-	cdata = (t_cdata *)ft_memalloc(sizeof(t_cdata));
 	data = (t_data *)ft_memalloc(sizeof(t_data));
 	parsed_ants = 0;
 	while (ft_gnl(0, &line) > 0)
 	{
-		verbose("%-50s ", line);
-		if (parse_ants(&parsed_ants, data, line))
-			continue;
-		parse_command(line, data, cdata);
-		if (*line != '#' && parse_line(line, data, cdata))
-			break ;
+		verbose("	%-50s ", line);
+		if (!parse_ants(&parsed_ants, data, line))
+		{
+			parse_command(line, data, &cdata);
+			if (*line != '#' && parse_line(line, data, &cdata))
+				break ;
+		}
 		free(line);
 		line = NULL;
 	}
 	if (line)
 		free(line);
-	free(cdata);
 	return (data);
 }

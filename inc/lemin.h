@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 03:13:50 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/03 07:26:01 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 # include "libft.h"
 # include <stdlib.h>
 
+# define ERR_MALLOC 01,"Malloc failed."
 # define ERR_NO_START_NODE 10,"No entry node has been specified."
 # define ERR_NO_END_NODE 11,"No exit node has been specified"
 # define ERR_NEG_OR_NUL_ANTS 12,"Negative or nul amount of ants."
 # define ERR_ISOLATED_ROOM 13,"At least one node is isolated"
 # define ERR_ROOM_ALREADY_EXISTS 14,"Node already exists."
-# define ERR_TUBE_UNKNOWN_ROOM 15,"Tube is trying to connect at least one unknown room."
-# define ERR_TUBE_SAME_ROOM_CONNECTION 16,"Tube is trying to connect a room with itself."
+# define ERR_TUBE_UNKNOWN_ROOM 15,"Tube trying to connect an unknown room"
+# define ERR_TUBE_SAME_ROOM 16,"Tube trying to connect a room with itself"
 # define ERR_TUBE_ALREADY_EXISTS 17,"Tube already exists."
 # define ERR_FORMAT_UNKNOWN 20,"Unknown line format."
 # define ERR_FORMAT_ROOM 21,"Unknown room line format."
@@ -32,6 +33,8 @@
 # define ERR_WARNING "Warning", 0
 
 # define ARG_VERBOSE 0
+
+# define V_COLOR 0x1c6f93
 
 /*
 ** Generic structures
@@ -117,7 +120,7 @@ typedef struct		s_network
 typedef struct		s_path
 {
 	int				length;
-	char			**nodes;
+	t_llist			*nodes;
 }					t_path;
 
 /*
@@ -127,6 +130,7 @@ typedef struct		s_path
 int					error(int errcode, char const *const errmsg, char *errtype,
 						int errexit);
 int					verbose(char *str, ...);
+void				verbose_path(t_path path);
 
 t_data				*parse_data(void);
 

@@ -6,7 +6,7 @@
 #    By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/22 14:51:03 by hbouillo          #+#    #+#              #
-#    Updated: 2018/03/03 03:10:53 by hbouillo         ###   ########.fr        #
+#    Updated: 2018/03/03 07:13:11 by hbouillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRC_1 = lemin.c verbose.c \
 	\
 	parser/network_builder.c parser/parser.c parser/rooms.c parser/tubes.c \
 	\
-	solver/solver.c
+	solver/solver.c solver/dijkstra/dijkstra.c \
+	solver/dijkstra/dijkstra_helper.c
 OBJ_1 = $(addprefix obj/src/,$(SRC_1:.c=.o))
 CFLAGS_1 = $(DEBUG_FLAGS) \
 	-I$(LIBS_PATH)/include \
