@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 07:26:01 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/04 21:53:17 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ typedef struct		s_cdata
 
 typedef struct		s_node
 {
+	int				id;
 	int				connections;
 	struct s_node	**nodes;
-	int				*distances;
 	char			*name;
 	t_pos			pos;
 }					t_node;

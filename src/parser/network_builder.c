@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 07:23:03 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/04 21:37:12 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int			build_nodes(t_network *network, t_data const *const data)
 	int				nodecount;
 	t_rlist			*rooms;
 
-	nodecount = -1;
+	nodecount = 0;
 	rooms = data->rooms;
 	while (rooms && nodecount++ > (int)0x80000000)
 		rooms = rooms->next;
@@ -29,11 +29,13 @@ static int			build_nodes(t_network *network, t_data const *const data)
 		network->nodes[nodecount] = (t_node *)ft_memalloc(sizeof(t_node));
 		network->nodes[nodecount]->name = ft_strdup(rooms->room->name);
 		network->nodes[nodecount]->pos = rooms->room->pos;
+		network->nodes[nodecount]->id = nodecount;
 		if (ft_strequ(rooms->room->name, data->start->name))
 			network->entry = network->nodes[nodecount];
 		else if (ft_strequ(rooms->room->name, data->end->name))
 			network->exit = network->nodes[nodecount];
-		verbose("	Built node Name(%s).\n", network->nodes[nodecount]->name);
+		verbose("    Built node Id(%d) Name(%s).\n",
+			network->nodes[nodecount]->id, network->nodes[nodecount]->name);
 		rooms = rooms->next;
 	}
 	return (0);
@@ -98,14 +100,10 @@ static int			link_nodes(t_network *network, t_data const *const data)
 		(*nodes)->connections = count_connections((*nodes)->name, tlist);
 		(*nodes)->nodes = (t_node **)ft_memalloc(
 			sizeof(t_node *) * ((*nodes)->connections + 1));
-		(*nodes)->distances = (int *)ft_memalloc(
-			sizeof(int) * ((*nodes)->connections + 1));
 		fill_connections(*nodes, network->nodes, tlist);
 		i = -1;
-		while (++i < (*nodes)->connections)
-			(*nodes)->distances[i] = 1;
-		verbose("	Linked node Name(%s) to %d nodes.\n",
-			(*nodes)->name, (*nodes)->connections);
+		verbose("    Linked node Id(%d) Name(%s) to %d nodes.\n",
+			(*nodes)->id, (*nodes)->name, (*nodes)->connections);
 		nodes++;
 	}
 	return (0);
@@ -113,28 +111,28 @@ static int			link_nodes(t_network *network, t_data const *const data)
 
 t_network			*build_network(t_data *data)
 {
-	t_network		*network;
+	t_network		*net;
 	t_node			**nodes_tmp;
 	int				nodes;
 	int				connection;
+	t_node			*n;
 
-	network = (t_network *)ft_memalloc(sizeof(t_network));
-	network->units = data->ants;
-	build_nodes(network, data);
-	link_nodes(network, data);
-	nodes_tmp = network->nodes - 1;
+	net = (t_network *)ft_memalloc(sizeof(t_network));
+	net->units = data->ants;
+	build_nodes(net, data);
+	link_nodes(net, data);
+	nodes_tmp = net->nodes - 1;
 	while (*(++nodes_tmp))
 		if (!(*nodes_tmp)->nodes)
 			error(ERR_ISOLATED_ROOM, ERR_WARNING);
 	nodes = -1;
-	while (network->nodes[++nodes])
+	while ((n = net->nodes[++nodes]))
 	{
-		verbose("Node detected: Name(%s), Connections(%d)\n",
-			network->nodes[nodes]->name, network->nodes[nodes]->connections);
+		verbose("Node detected: Id(%d), Name(%s), Connections(%d)\n",
+			n->id, n->name, n->connections);
 		connection = -1;
-		while (network->nodes[nodes]->nodes[++connection])
-			verbose("    Connects with: Name(%s)\n",
-				network->nodes[nodes]->nodes[connection]->name);
+		while ((n = net->nodes[nodes]->nodes[++connection]))
+			verbose("    Connects with: Id(%d), Name(%s)\n", n->id, n->name);
 	}
-	return (network);
+	return (net);
 }

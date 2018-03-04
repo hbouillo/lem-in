@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 07:06:50 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 07:14:13 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/04 22:17:11 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,6 @@ void				free_dijkstra(t_dijkstra dijkstra)
 {
 	ft_llist_del(&dijkstra.updated_dnodes, &free);
 	ft_llist_del(&dijkstra.subgraph, NULL);
-}
-
-t_dnode				*list_get_node_elem(t_llist *list, t_node *node)
-{
-	while (list)
-	{
-		if (((t_dnode *)list->data)->node == node)
-			return ((t_dnode *)list->data);
-		list = list->next;
-	}
-	return (NULL);
+	free(dijkstra.states);
+	free(dijkstra.dnode_array);
 }

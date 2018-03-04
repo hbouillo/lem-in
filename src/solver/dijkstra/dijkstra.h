@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 07:07:26 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 07:09:35 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/04 22:19:46 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ typedef struct		s_dnode
 	struct s_dnode	*path;
 }					t_dnode;
 
+# define IN_SUBGRAPH 0xF0
+# define IN_UPDATED 0x0F
+
 typedef struct		s_dijkstra
 {
+	char			*states;
+	t_dnode			**dnode_array;
 	t_llist			*updated_dnodes;
 	t_llist			*subgraph;
 }					t_dijkstra;
@@ -33,7 +38,5 @@ t_dnode				*new_dnode(t_node *node);
 void				build_path(t_dijkstra dijkstra, t_path *path);
 
 void				free_dijkstra(t_dijkstra dijkstra);
-
-t_dnode				*list_get_node_elem(t_llist *list, t_node *node);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 07:15:08 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/04 22:21:23 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static void		free_network(t_network *network)
 	nodes_temp = network->nodes;
 	while (*nodes_temp)
 	{
-		free((*nodes_temp)->distances);
 		free((*nodes_temp)->name);
 		free((*nodes_temp)->nodes);
 		free(*nodes_temp);
@@ -71,13 +70,14 @@ void			lemin(void)
 	network = build_network(data);
 	verbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_data(data);
-	verbose("%d nodes detected in network. Node %s is entry. Node %s \
-is exit.\n", network->nodes_count, network->entry->name, network->exit->name);
+	verbose("%d nodes detected in network. Node Name(%s) is entry. \
+Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->exit->name);
 	verbose("%rgbSolving...\n%0rgb", V_COLOR);
 	path = solve(network);
 	verbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_network(network);
-	verbose_path(*path);
+	if (path->length)
+		verbose_path(*path);
 	ft_llist_del(&path->nodes, &free);
 	free(path);
 }
