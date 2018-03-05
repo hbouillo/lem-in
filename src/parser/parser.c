@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:28:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/03 06:34:32 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 04:10:07 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_data			*parse_data(void)
 	parsed_ants = 0;
 	while (ft_gnl(0, &line) > 0)
 	{
-		verbose("	%-50s ", line);
+		verbose("    %-50s ", line);
 		if (!parse_ants(&parsed_ants, data, line))
 		{
 			parse_command(line, data, &cdata);

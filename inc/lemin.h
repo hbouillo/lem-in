@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/04 21:53:17 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 03:41:04 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ typedef struct		s_pos
 
 typedef struct		s_room
 {
+	int				id;
 	char			*name;
+	long			name_hash;
 	t_pos			pos;
 }					t_room;
 
@@ -63,31 +65,22 @@ typedef enum		e_rtype
 	end
 }					t_rtype;
 
-typedef struct		s_rlist
-{
-	t_room			*room;
-	struct s_rlist	*next;
-}					t_rlist;
-
 typedef struct		s_tube
 {
 	t_room			*room1;
 	t_room			*room2;
 }					t_tube;
 
-typedef struct		s_tlist
-{
-	t_tube			*tube;
-	struct s_tlist	*next;
-}					t_tlist;
-
 typedef struct		s_data
 {
 	int				ants;
-	t_rlist			*rooms;
-	t_tlist			*tubes;
+	int				rooms_count;
+	t_llist			*rooms;
+	t_llist			*tubes;
 	t_room			*start;
 	t_room			*end;
+	int				*id_tubes_count;
+	int				**id_tubes;
 }					t_data;
 
 typedef struct		s_cdata
@@ -138,7 +131,9 @@ t_network			*build_network(t_data *data);
 
 t_path				*solve(t_network *network);
 
-void				free_rlist(t_rlist *room);
-void				free_tlist(t_tlist *room);
+void				free_room(void *room);
+void				free_tube(void *room);
+
+long				djb2(char const *str);
 
 #endif

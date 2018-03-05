@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 03:36:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/04 22:26:29 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 02:36:28 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static void			update_node(t_dijkstra *dijkstra)
 	i = -1;
 	while (++i < to_update->node->connections)
 	{
+		if (!to_update->node->nodes[i])
+			continue ;
 		if (!(tmp_dnode = dijkstra->dnode_array[to_update->node->nodes[i]->id]))
 		{
 			tmp_dnode = new_dnode(to_update->node->nodes[i]);

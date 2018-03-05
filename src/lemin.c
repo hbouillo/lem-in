@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/04 22:21:23 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 04:07:20 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,15 @@ int				error(int errcode, char const *const errmsg, char *errtype,
 
 static void		free_data(t_data *data)
 {
-	free_rlist(data->rooms);
-	free_tlist(data->tubes);
+	int			i;
+
+	i = -1;
+	while (++i < data->rooms_count)
+		free(data->id_tubes[i]);
+	free(data->id_tubes_count);
+	free(data->id_tubes);
+	ft_llist_del(&data->rooms, &free_room);
+	ft_llist_del(&data->tubes, &free_tube);
 	free(data);
 }
 
@@ -82,8 +89,11 @@ Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->
 	free(path);
 }
 
+#include <unistd.h>
+
 int				main(int argc, char **argv)
 {
+	// sleep(10);
 	register_arg_ref("verbose", 'v', 0, ARG_VERBOSE);
 	if (parse_args(argc, argv))
 	{
