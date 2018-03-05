@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 03:59:29 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 03:32:02 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 04:33:52 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_room			*find_room(char *name, t_data *data)
 	long		name_hash;
 
 	name_hash = djb2(name);
-	rooms = data->rooms;
+	rooms = data->hash_rooms[name_hash % ROOM_LISTS];
 	while (rooms)
 	{
 		room = ((t_room *)rooms->data);
@@ -44,6 +44,7 @@ int				parse_room(char **split, t_data *data, t_cdata *cdata)
 	if (find_room(room->name, data))
 		error(ERR_ROOM_ALREADY_EXISTS, ERR_WARNING); //TODO: Fin acquisition ?
 	ft_llist_front(&data->rooms, ft_llist_new(room));
+	ft_llist_front(data->hash_rooms + room->name_hash % ROOM_LISTS, ft_llist_new(room));
 	if (cdata->room_type == start)
 		data->start = room;
 	else if (cdata->room_type == end)

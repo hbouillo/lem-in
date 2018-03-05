@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 04:07:20 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 05:13:24 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ static void		free_data(t_data *data)
 	i = -1;
 	while (++i < data->rooms_count)
 		free(data->id_tubes[i]);
+	i = -1;
+	while (++i < ROOM_LISTS)
+		ft_llist_del(data->hash_rooms + i, NULL);
 	free(data->id_tubes_count);
 	free(data->id_tubes);
 	ft_llist_del(&data->rooms, &free_room);
@@ -89,11 +92,8 @@ Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->
 	free(path);
 }
 
-#include <unistd.h>
-
 int				main(int argc, char **argv)
 {
-	// sleep(10);
 	register_arg_ref("verbose", 'v', 0, ARG_VERBOSE);
 	if (parse_args(argc, argv))
 	{

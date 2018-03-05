@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 03:41:04 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/05 04:18:25 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct		s_tube
 	t_room			*room2;
 }					t_tube;
 
+#define ROOM_LISTS 1000
+
 typedef struct		s_data
 {
 	int				ants;
@@ -81,6 +83,7 @@ typedef struct		s_data
 	t_room			*end;
 	int				*id_tubes_count;
 	int				**id_tubes;
+	t_llist			*hash_rooms[ROOM_LISTS];
 }					t_data;
 
 typedef struct		s_cdata
