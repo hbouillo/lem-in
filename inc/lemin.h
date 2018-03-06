@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 06:14:51 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 06:59:19 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 # define ERR_NEG_OR_NUL_ANTS 12,"Negative or nul amount of ants."
 # define ERR_ISOLATED_ROOM 13,"At least one node is isolated"
 # define ERR_ROOM_ALREADY_EXISTS 14,"Node already exists."
-# define ERR_TUBE_UNKNOWN_ROOM 15,"Tube trying to connect an unknown room"
-# define ERR_TUBE_SAME_ROOM 16,"Tube trying to connect a room with itself"
-# define ERR_TUBE_ALREADY_EXISTS 17,"Tube already exists."
+# define ERR_ILLEGAL_ROOM 15,"Illegal room name."
+# define ERR_TUBE_UNKNOWN_ROOM 16,"Tube trying to connect an unknown room"
+# define ERR_TUBE_SAME_ROOM 17,"Tube trying to connect a room with itself"
+# define ERR_TUBE_ALREADY_EXISTS 18,"Tube already exists."
 # define ERR_FORMAT_UNKNOWN 20,"Unknown line format."
 # define ERR_FORMAT_ROOM 21,"Unknown room line format."
 # define ERR_FORMAT_TUBE 22,"Unknown tube line format."

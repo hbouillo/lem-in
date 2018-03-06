@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:28:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 06:44:19 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 07:05:19 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static int		parse_line(char *line, t_data *data, t_cdata *cdata)
 	if (ft_chartablen(split) == 3)
 	{
 		verbose("node\n");
-		parse_room(split, data, cdata);
+		if (parse_room(split, data, cdata))
+			return (1);
 	}
 	else
 	{
@@ -88,8 +89,8 @@ t_data			*parse_data(void)
 	parsed_ants = 0;
 	while (ft_gnl(0, &line) > 0)
 	{
-		verbose("    %-50s ", line);
 		ft_printf("%s\n", line);
+		verbose("    %-50s ", line);
 		if (!parse_ants(&parsed_ants, data, line))
 		{
 			parse_command(line, data, &cdata);

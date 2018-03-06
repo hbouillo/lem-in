@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 03:59:29 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 06:43:43 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 07:02:35 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ int				parse_room(char **split, t_data *data, t_cdata *cdata)
 	room->name_hash = djb2(room->name);
 	room->pos.x = ft_atoi(split[1]);
 	room->pos.y = ft_atoi(split[2]);
+	if (*room->name == 'L')
+		return (error(ERR_ILLEGAL_ROOM, ERR_WARNING));
 	if (find_room(room->name, data))
-		error(ERR_ROOM_ALREADY_EXISTS, ERR_WARNING); //TODO: Fin acquisition ?
+		error(ERR_ROOM_ALREADY_EXISTS, ERR_WARNING);
 	ft_llist_front(&data->rooms, ft_llist_new(room));
 	ft_llist_front(data->hash_rooms + room->name_hash % ROOM_LISTS, ft_llist_new(room));
 	if (cdata->room_type == start)
