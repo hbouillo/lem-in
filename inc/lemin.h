@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 04:18:25 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 06:14:51 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct		s_tube
 	t_room			*room2;
 }					t_tube;
 
-#define ROOM_LISTS 1000
+#define ROOM_LISTS 10000
 
 typedef struct		s_data
 {
@@ -98,6 +98,7 @@ typedef struct		s_cdata
 typedef struct		s_node
 {
 	int				id;
+	int				hidden;
 	int				connections;
 	struct s_node	**nodes;
 	char			*name;
@@ -106,7 +107,6 @@ typedef struct		s_node
 
 typedef struct		s_network
 {
-	int				units;
 	int				nodes_count;
 	t_node			**nodes;
 	t_node			*entry;
@@ -116,7 +116,7 @@ typedef struct		s_network
 typedef struct		s_path
 {
 	int				length;
-	t_llist			*nodes;
+	char			**nodes;
 }					t_path;
 
 /*
@@ -133,6 +133,8 @@ t_data				*parse_data(void);
 t_network			*build_network(t_data *data);
 
 t_path				*solve(t_network *network);
+
+void				run_ants(int ants, t_path *paths);
 
 void				free_room(void *room);
 void				free_tube(void *room);

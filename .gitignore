@@ -1,9 +1,12 @@
+tests/
+lib/
+
 # Prerequisites
 *.d
 
 # Object files
 *.o
-*.ko
+*.k
 *.obj
 *.elf
 

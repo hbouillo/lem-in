@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 07:07:26 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 02:33:46 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 03:22:06 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct		s_dijkstra
 
 t_dnode				*new_dnode(t_node *node);
 
-void				build_path(t_dijkstra dijkstra, t_path *path);
+void				extract_path(t_dijkstra dijkstra, t_path *path);
 
 void				free_dijkstra(t_dijkstra dijkstra);
 

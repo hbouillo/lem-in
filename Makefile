@@ -6,7 +6,7 @@
 #    By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/22 14:51:03 by hbouillo          #+#    #+#              #
-#    Updated: 2018/03/05 00:06:12 by hbouillo         ###   ########.fr        #
+#    Updated: 2018/03/06 06:12:34 by hbouillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC = clang
 
 # TARGET 1
 TARGET_1 = lem-in
-SRC_1 = lemin.c verbose.c hash.c \
+SRC_1 = lemin.c verbose.c hash.c display.c \
 	\
 	parser/network_builder.c parser/parser.c parser/rooms.c parser/tubes.c \
 	\

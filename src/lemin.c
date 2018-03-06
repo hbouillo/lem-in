@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 05:13:24 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 06:15:33 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,34 @@ static void		free_network(t_network *network)
 	free(network);
 }
 
+static void		free_paths(t_path *paths)
+{
+	int			i;
+	int			j;
+
+	i = 0;
+	while (paths[i].length)
+	{
+		j = -1;
+		while (++j < paths[i].length)
+			free(paths[i].nodes[j]);
+		free(paths[i].nodes);
+		i++;
+	}
+	free(paths);
+}
+
 void			lemin(void)
 {
 	t_data		*data;
 	t_network	*network;
-	t_path		*path;
+	t_path		*paths;
+	int			i;
+	int			ants;
 
 	verbose("%rgbParsing...\n%0rgb", V_COLOR);
 	data = parse_data();
+	ants = data->ants;
 	verbose("%rgbDone.\n%rgbChecking data...\n%0rgb", V_COLOR, V_COLOR);
 	if (!data->start)
 		error(ERR_NO_START_NODE, ERR_CRITICAL);
@@ -83,13 +103,14 @@ void			lemin(void)
 	verbose("%d nodes detected in network. Node Name(%s) is entry. \
 Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->exit->name);
 	verbose("%rgbSolving...\n%0rgb", V_COLOR);
-	path = solve(network);
+	paths = solve(network);
 	verbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_network(network);
-	if (path->length)
-		verbose_path(*path);
-	ft_llist_del(&path->nodes, &free);
-	free(path);
+	i = 0;
+	while (paths[i].length)
+		verbose_path(paths[i++]);
+	run_ants(ants, paths);
+	free_paths(paths);
 }
 
 int				main(int argc, char **argv)

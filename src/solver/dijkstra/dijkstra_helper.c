@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 07:06:50 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 04:00:56 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 05:57:07 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,29 @@ t_dnode				*new_dnode(t_node *node)
 	return (dnode);
 }
 
-void				build_path(t_dijkstra dijkstra, t_path *path)
+void				extract_path(t_dijkstra dijkstra, t_path *path)
 {
 	t_dnode			*dnode;
+	int				i;
 
+	while (path->length)
+		path++;
 	ft_bzero(path, sizeof(t_path));
 	dnode = ((t_dnode *)dijkstra.subgraph->data);
 	while (dnode)
 	{
-		ft_llist_front(&path->nodes,
-			ft_llist_new(ft_strdup(dnode->node->name)));
 		path->length++;
+		dnode = dnode->path;
+	}
+	if (!(path->nodes = (char **)ft_memalloc(sizeof(char *) * path->length)))
+		exit(1);
+	i = path->length;
+	dnode = ((t_dnode *)dijkstra.subgraph->data);
+	while (dnode)
+	{
+		path->nodes[--i] = ft_strdup(dnode->node->name);
+		if (dnode->path && dnode != dijkstra.subgraph->data)
+			dnode->node->hidden = 1;
 		dnode = dnode->path;
 	}
 }

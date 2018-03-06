@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 04:01:45 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 06:14:49 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,35 +76,6 @@ static void			count_connections(t_data *data, t_llist *tubes)
 	}
 }
 
-// static int			fill_connections(t_node *node, t_node **list_nodes,
-// 						t_llist *tlist)
-// {
-// 	int				i;
-// 	t_node			**nodes_temp;
-//
-// 	i = 0;
-// 	while (tlist)
-// 	{
-// 		if (node->id == ((t_tube *)tlist->data)->room1->id ||
-// 			node->id == ((t_tube *)tlist->data)->room2->id)
-// 		{
-// 			nodes_temp = list_nodes;
-// 			while (*nodes_temp)
-// 			{
-// 				if ((*nodes_temp)->id != node->id &&
-// 					((*nodes_temp)->id == ((t_tube *)tlist->data)->room1->id ||
-// 					(*nodes_temp)->id == ((t_tube *)tlist->data)->room2->id))
-// 				{
-// 					node->nodes[i++] = (*nodes_temp);
-// 				}
-// 				nodes_temp++;
-// 			}
-// 		}
-// 		tlist = tlist->next;
-// 	}
-// 	return (0);
-// }
-
 static int			fill_connections(t_node *node, t_node **list_nodes,
 						t_data *data)
 {
@@ -116,30 +87,24 @@ static int			fill_connections(t_node *node, t_node **list_nodes,
 	return (0);
 }
 
-static void			remove_double_links(t_network *network)
+static void			remove_double_links(t_node *node)
 {
-	t_node			**nodes;
 	int				i;
 	int				j;
 
-	nodes = network->nodes;
-	while (*nodes)
+	i = -1;
+	while (++i < node->connections)
 	{
-		i = -1;
-		while (++i < (*nodes)->connections)
+		j = -1;
+		while (++j < node->connections)
 		{
-			j = -1;
-			while (++j < (*nodes)->connections)
-			{
-				if ((*nodes)->nodes[i] && i != j &&
-					(*nodes)->nodes[i] == (*nodes)->nodes[j])
-					{
-						error(ERR_TUBE_ALREADY_EXISTS, ERR_WARNING);
-						(*nodes)->nodes[i] = NULL;
-					}
-			}
+			if ((node->nodes[i] && i != j &&
+				node->nodes[i] == node->nodes[j]))
+				{
+					error(ERR_TUBE_ALREADY_EXISTS, ERR_WARNING);
+					node->nodes[i] = NULL;
+				}
 		}
-		nodes++;
 	}
 }
 
@@ -159,12 +124,12 @@ static int			link_nodes(t_network *network, t_data *data)
 		(*nodes)->nodes = (t_node **)ft_memalloc(
 			sizeof(t_node *) * ((*nodes)->connections + 1));
 		fill_connections(*nodes, network->nodes, data);
+		remove_double_links(*nodes);
 		i = -1;
 		verbose("    Linked node Id(%d) Name(%s) to %d nodes.\n",
 			(*nodes)->id, (*nodes)->name, (*nodes)->connections);
 		nodes++;
 	}
-	remove_double_links(network);
 	return (0);
 }
 
@@ -175,7 +140,6 @@ t_network			*build_network(t_data *data)
 	int				nodes;
 
 	net = (t_network *)ft_memalloc(sizeof(t_network));
-	net->units = data->ants;
 	build_nodes(net, data);
 	link_nodes(net, data);
 	nodes_tmp = net->nodes - 1;

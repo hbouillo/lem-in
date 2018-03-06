@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 03:36:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/05 02:36:28 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 05:16:32 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void			update_node(t_dijkstra *dijkstra)
 	i = -1;
 	while (++i < to_update->node->connections)
 	{
-		if (!to_update->node->nodes[i])
+		if (!to_update->node->nodes[i] || to_update->node->nodes[i]->hidden)
 			continue ;
 		if (!(tmp_dnode = dijkstra->dnode_array[to_update->node->nodes[i]->id]))
 		{
@@ -67,12 +67,12 @@ static t_dnode		*select_node(t_dijkstra *dijkstra)
 		tmp = tmp->next;
 	}
 	if (dnode)
-		verbose("Selected room Id(%d), Name(%s)\n", dnode->node->id,
+		verbose("    Selected room Id(%d), Name(%s)\n", dnode->node->id,
 		dnode->node->name);
 	return (dnode);
 }
 
-void				find_shortest_path(t_path *path, t_network *network)
+int					find_shortest_path(t_path *path, t_network *network)
 {
 	t_dijkstra		dijkstra;
 	t_dnode			*tmp;
@@ -91,12 +91,13 @@ void				find_shortest_path(t_path *path, t_network *network)
 		if (!tmp)
 		{
 			verbose("Couldn't find any path.\n");
-			return ;
+			return (0);
 		}
 		add_subgraph_dnode(&dijkstra, tmp);
 		update_node(&dijkstra);
 	}
-	build_path(dijkstra, path);
+	extract_path(dijkstra, path);
 	verbose("Found shortest path.\n");
 	free_dijkstra(dijkstra);
+	return (1);
 }
