@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:28:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 06:37:11 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/06 06:44:19 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ t_data			*parse_data(void)
 		free(line);
 		line = NULL;
 	}
-	ft_putchar('\n');
 	if (line)
 		free(line);
 	return (data);
