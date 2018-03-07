@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 03:36:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 04:53:40 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:19:29 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static t_dnode		*select_node(t_dijkstra *dijkstra)
 int					find_shortest_path(t_path *path, t_network *network,
 						int max_length)
 {
-	t_dijkstra		dijkstra;
+	static t_dijkstra		dijkstra;
 	t_dnode			*tmp;
 
 	ft_bzero(&dijkstra, sizeof(t_dijkstra));

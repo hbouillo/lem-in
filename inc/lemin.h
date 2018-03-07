@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 04:42:37 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:12:16 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int					error(int errcode, char const *const errmsg, char *errtype,
 int					verbose(char *str, ...);
 int					sverbose(char *str, ...);
 void				verbose_path(t_path path);
+void				sverbose_path(t_path path);
 
 t_data				*parse_data(void);
 

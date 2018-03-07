@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:16:39 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 03:15:49 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:12:49 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,19 @@ void			verbose_path(t_path path)
 			verbose(" - ");
 	}
 	verbose(" ]\n");
+}
+
+void			sverbose_path(t_path path)
+{
+	int			i;
+
+	sverbose("Path is [ ");
+	i = -1;
+	while (++i < path.length)
+	{
+		sverbose("%s", path.nodes[i]);
+		if (i < path.length - 1)
+			sverbose(" - ");
+	}
+	sverbose(" ]\n");
 }

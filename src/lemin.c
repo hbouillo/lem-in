@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 04:53:20 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:13:09 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void			lemin(int max_paths, int max_ants)
 	t_data		*data;
 	t_network	*network;
 	t_path		*paths;
-	int			i;
 	int			ants;
 
 	sverbose("%rgbParsing...\n%0rgb", V_COLOR);
@@ -106,9 +105,6 @@ Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->
 	paths = solve(network, max_paths, max_ants);
 	sverbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_network(network);
-	i = 0;
-	while (paths[i].length)
-		verbose_path(paths[i++]);
 	run_ants(ants, paths);
 	free_paths(paths);
 }
