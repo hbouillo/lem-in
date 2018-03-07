@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 06:02:56 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 06:10:08 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ Node Name(%s) is exit.\n", network->nodes_count, network->entry->name,
 	free_paths(paths);
 }
 
-int				submain(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	int			max_paths;
 	int			max_length;
@@ -87,12 +87,5 @@ int				submain(int argc, char **argv)
 		max_length = ft_nbrmax(ft_atoi(get_arg(ARG_MAX_LENGTH)->data[0]), 1);
 	lemin(max_paths, max_length);
 	destroy_args();
-	return (0);
-}
-
-int main(int ac, char **av)
-{
-	submain(ac, av);
-	while (1);
 	return (0);
 }
