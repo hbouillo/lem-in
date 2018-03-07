@@ -1,9 +1,0 @@
-2 algos:
-	chemin le plus court (dijkstra)
-	chemins rendant le nombre de cycles le plus petit.
-
-algo complet:
-	1) Recherche chemin le plus court (dist_min)
-	2) Calcul nombre de chemins max ( max_paths = min(entry_tubes, exit_tubes) ) => si max_paths == 1, alors dijkstra
-	3) Recherche de tout les chemins possibles (dist < dist_min / max_paths)
-	4) Recherche de la combinaison la plus avantageuse (path_score = sum(path_dists) / (max_paths ^ 2)) => recherche du score le plus petit
