@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 06:14:49 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:53:12 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static int			build_nodes(t_network *network, t_data const *const data)
 	t_llist			*rooms;
 	t_room			*room;
 
-	network->nodes = (t_node **)ft_memalloc(sizeof(t_node *) * (data->rooms_count + 1));
+	network->nodes = (t_node **)ft_memalloc(
+		sizeof(t_node *) * (data->rooms_count + 1));
 	network->nodes_count = data->rooms_count;
 	rooms = data->rooms;
 	while (rooms)
@@ -38,76 +39,6 @@ static int			build_nodes(t_network *network, t_data const *const data)
 	return (0);
 }
 
-static void			count_connections(t_data *data, t_llist *tubes)
-{
-	t_tube			*tube;
-	t_llist			*tubes_save;
-	int				room;
-	int				i;
-
-	if (!(data->id_tubes_count = (int *)ft_memalloc(sizeof(int) * data->rooms_count)) ||
-		!(data->id_tubes = (int **)ft_memalloc(sizeof(int *) * data->rooms_count)))
-		error(ERR_MALLOC, ERR_CRITICAL);
-	tubes_save = tubes;
-	while (tubes)
-	{
-		tube = (t_tube *)tubes->data;
-		data->id_tubes_count[tube->room1->id]++;
-		data->id_tubes_count[tube->room2->id]++;
-		tubes = tubes->next;
-	}
-	room = -1;
-	while (++room < data->rooms_count)
-		if (!(data->id_tubes[room] = (int *)ft_memalloc(sizeof(int) * data->id_tubes_count[room])))
-			error(ERR_MALLOC, ERR_CRITICAL);
-	tubes = tubes_save;
-	while (tubes)
-	{
-		tube = (t_tube *)tubes->data;
-		i = 0;
-		while (data->id_tubes[tube->room1->id][i] && i < data->id_tubes_count[tube->room1->id])
-			i++;
-		data->id_tubes[tube->room1->id][i] = tube->room2->id;
-		i = 0;
-		while (data->id_tubes[tube->room2->id][i] && i < data->id_tubes_count[tube->room2->id])
-			i++;
-		data->id_tubes[tube->room2->id][i] = tube->room1->id;
-		tubes = tubes->next;
-	}
-}
-
-static int			fill_connections(t_node *node, t_node **list_nodes,
-						t_data *data)
-{
-	int				i;
-
-	i = -1;
-	while (++i < node->connections)
-		node->nodes[i] = list_nodes[data->id_tubes[node->id][i]];
-	return (0);
-}
-
-static void			remove_double_links(t_node *node)
-{
-	int				i;
-	int				j;
-
-	i = -1;
-	while (++i < node->connections)
-	{
-		j = -1;
-		while (++j < node->connections)
-		{
-			if ((node->nodes[i] && i != j &&
-				node->nodes[i] == node->nodes[j]))
-				{
-					error(ERR_TUBE_ALREADY_EXISTS, ERR_WARNING);
-					node->nodes[i] = NULL;
-				}
-		}
-	}
-}
-
 static int			link_nodes(t_network *network, t_data *data)
 {
 	t_node			**nodes;
@@ -116,7 +47,7 @@ static int			link_nodes(t_network *network, t_data *data)
 
 	nodes = network->nodes;
 	tlist = data->tubes;
-	count_connections(data, tlist);
+	process_data(data, tlist);
 	while (*nodes)
 	{
 		tlist = data->tubes;

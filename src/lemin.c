@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:13:09 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 06:02:56 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,54 +30,12 @@ int				error(int errcode, char const *const errmsg, char *errtype,
 	return (1);
 }
 
-static void		free_data(t_data *data)
+void			check_data(t_data *data)
 {
-	int			i;
-
-	i = -1;
-	while (++i < data->rooms_count)
-		free(data->id_tubes[i]);
-	i = -1;
-	while (++i < ROOM_LISTS)
-		ft_llist_del(data->hash_rooms + i, NULL);
-	free(data->id_tubes_count);
-	free(data->id_tubes);
-	ft_llist_del(&data->rooms, &free_room);
-	ft_llist_del(&data->tubes, &free_tube);
-	free(data);
-}
-
-static void		free_network(t_network *network)
-{
-	t_node		**nodes_temp;
-
-	nodes_temp = network->nodes;
-	while (*nodes_temp)
-	{
-		free((*nodes_temp)->name);
-		free((*nodes_temp)->nodes);
-		free(*nodes_temp);
-		nodes_temp++;
-	}
-	free(network->nodes);
-	free(network);
-}
-
-static void		free_paths(t_path *paths)
-{
-	int			i;
-	int			j;
-
-	i = 0;
-	while (paths[i].length)
-	{
-		j = -1;
-		while (++j < paths[i].length)
-			free(paths[i].nodes[j]);
-		free(paths[i].nodes);
-		i++;
-	}
-	free(paths);
+	if (!data->start)
+		error(ERR_NO_START_NODE, ERR_CRITICAL);
+	else if (!data->end)
+		error(ERR_NO_END_NODE, ERR_CRITICAL);
 }
 
 void			lemin(int max_paths, int max_ants)
@@ -91,16 +49,14 @@ void			lemin(int max_paths, int max_ants)
 	data = parse_data();
 	ants = data->ants;
 	sverbose("%rgbDone.\n%rgbChecking data...\n%0rgb", V_COLOR, V_COLOR);
-	if (!data->start)
-		error(ERR_NO_START_NODE, ERR_CRITICAL);
-	else if (!data->end)
-		error(ERR_NO_END_NODE, ERR_CRITICAL);
+	check_data(data);
 	sverbose("%rgbDone.\n%rgbBuilding network...\n%0rgb", V_COLOR, V_COLOR);
 	network = build_network(data);
 	sverbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_data(data);
 	verbose("%d nodes detected in network. Node Name(%s) is entry. \
-Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->exit->name);
+Node Name(%s) is exit.\n", network->nodes_count, network->entry->name,
+		network->exit->name);
 	sverbose("%rgbSolving...\n%0rgb", V_COLOR);
 	paths = solve(network, max_paths, max_ants);
 	sverbose("%rgbDone.\n%0rgb", V_COLOR);
@@ -109,7 +65,7 @@ Node Name(%s) is exit.\n", network->nodes_count, network->entry->name, network->
 	free_paths(paths);
 }
 
-int				main(int argc, char **argv)
+int				submain(int argc, char **argv)
 {
 	int			max_paths;
 	int			max_length;
@@ -131,5 +87,12 @@ int				main(int argc, char **argv)
 		max_length = ft_nbrmax(ft_atoi(get_arg(ARG_MAX_LENGTH)->data[0]), 1);
 	lemin(max_paths, max_length);
 	destroy_args();
+	return (0);
+}
+
+int main(int ac, char **av)
+{
+	submain(ac, av);
+	while (1);
 	return (0);
 }

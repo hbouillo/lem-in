@@ -6,11 +6,24 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 07:06:50 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 05:57:07 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:54:13 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./dijkstra.h"
+
+void				add_updated_dnode(t_dijkstra *dijkstra, t_dnode *dnode)
+{
+	dijkstra->states[dnode->node->id] |= IN_UPDATED;
+	ft_llist_front(&dijkstra->updated_dnodes, ft_llist_new(dnode));
+	dijkstra->dnode_array[dnode->node->id] = dnode;
+}
+
+void				add_subgraph_dnode(t_dijkstra *dijkstra, t_dnode *dnode)
+{
+	dijkstra->states[dnode->node->id] |= IN_SUBGRAPH;
+	ft_llist_front(&dijkstra->subgraph, ft_llist_new(dnode));
+}
 
 t_dnode				*new_dnode(t_node *node)
 {

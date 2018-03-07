@@ -6,24 +6,11 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 03:36:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:19:29 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:55:58 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./dijkstra.h"
-
-static void			add_updated_dnode(t_dijkstra *dijkstra, t_dnode *dnode)
-{
-	dijkstra->states[dnode->node->id] |= IN_UPDATED;
-	ft_llist_front(&dijkstra->updated_dnodes, ft_llist_new(dnode));
-	dijkstra->dnode_array[dnode->node->id] = dnode;
-}
-
-static void			add_subgraph_dnode(t_dijkstra *dijkstra, t_dnode *dnode)
-{
-	dijkstra->states[dnode->node->id] |= IN_SUBGRAPH;
-	ft_llist_front(&dijkstra->subgraph, ft_llist_new(dnode));
-}
 
 static void			update_node(t_dijkstra *dijkstra, int max_dist)
 {
@@ -33,7 +20,7 @@ static void			update_node(t_dijkstra *dijkstra, int max_dist)
 
 	to_update = (t_dnode *)dijkstra->subgraph->data;
 	if (max_dist > 1 && to_update->dist >= max_dist)
-		return;
+		return ;
 	i = -1;
 	while (++i < to_update->node->connections)
 	{
@@ -74,19 +61,26 @@ static t_dnode		*select_node(t_dijkstra *dijkstra)
 	return (dnode);
 }
 
+static void			init_dijkstra(t_dijkstra *dijkstra, t_network *network)
+{
+	ft_bzero(dijkstra, sizeof(t_dijkstra));
+	if (!(dijkstra->states = (char *)ft_memalloc(
+			sizeof(char) * network->nodes_count)))
+		error(ERR_MALLOC, ERR_CRITICAL);
+	if (!(dijkstra->dnode_array = (t_dnode **)ft_memalloc(
+			sizeof(t_dnode *) * network->nodes_count)))
+		error(ERR_MALLOC, ERR_CRITICAL);
+	add_updated_dnode(dijkstra, new_dnode(network->entry));
+	((t_dnode *)dijkstra->updated_dnodes->data)->dist = 0;
+}
+
 int					find_shortest_path(t_path *path, t_network *network,
 						int max_length)
 {
-	static t_dijkstra		dijkstra;
+	t_dijkstra		dijkstra;
 	t_dnode			*tmp;
 
-	ft_bzero(&dijkstra, sizeof(t_dijkstra));
-	if (!(dijkstra.states = (char *)ft_memalloc(sizeof(char) * network->nodes_count)))
-		error(ERR_MALLOC, ERR_CRITICAL);
-	if (!(dijkstra.dnode_array = (t_dnode **)ft_memalloc(sizeof(t_dnode *) * network->nodes_count)))
-		error(ERR_MALLOC, ERR_CRITICAL);
-	add_updated_dnode(&dijkstra, new_dnode(network->entry));
-	((t_dnode *)dijkstra.updated_dnodes->data)->dist = 0;
+	init_dijkstra(&dijkstra, network);
 	while (!dijkstra.subgraph ||
 		((t_dnode *)dijkstra.subgraph->data)->node != network->exit)
 	{

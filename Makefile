@@ -6,7 +6,7 @@
 #    By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/22 14:51:03 by hbouillo          #+#    #+#              #
-#    Updated: 2018/03/06 06:12:34 by hbouillo         ###   ########.fr        #
+#    Updated: 2018/03/07 05:48:33 by hbouillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,10 @@ CC = clang
 
 # TARGET 1
 TARGET_1 = lem-in
-SRC_1 = lemin.c verbose.c hash.c display.c \
+SRC_1 = lemin.c verbose.c hash.c display.c destroy.c \
 	\
 	parser/network_builder.c parser/parser.c parser/rooms.c parser/tubes.c \
+	parser/network_helper.c \
 	\
 	solver/solver.c solver/dijkstra/dijkstra.c \
 	solver/dijkstra/dijkstra_helper.c

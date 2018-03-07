@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:12:16 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:42:48 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct		s_tube
 	t_room			*room2;
 }					t_tube;
 
-#define ROOM_LISTS 10000
+# define ROOM_LISTS 10000
 
 typedef struct		s_data
 {
@@ -146,5 +146,9 @@ void				free_room(void *room);
 void				free_tube(void *room);
 
 long				djb2(char const *str);
+
+void				free_data(t_data *data);
+void				free_network(t_network *network);
+void				free_paths(t_path *paths);
 
 #endif

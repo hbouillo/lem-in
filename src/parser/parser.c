@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:28:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 07:05:19 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:43:13 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ static int		parse_line(char *line, t_data *data, t_cdata *cdata)
 		ft_chartabfree(split);
 		split = ft_strsplit(line, '-');
 		if (ft_chartablen(split) == 2)
-		{
 			parse_tube(split, data, cdata);
-		}
 		else
 		{
 			error(ERR_FORMAT_UNKNOWN, ERR_WARNING);

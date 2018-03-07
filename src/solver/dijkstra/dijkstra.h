@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 07:07:26 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 03:22:06 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 05:50:06 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,8 @@ t_dnode				*new_dnode(t_node *node);
 void				extract_path(t_dijkstra dijkstra, t_path *path);
 
 void				free_dijkstra(t_dijkstra dijkstra);
+
+void				add_subgraph_dnode(t_dijkstra *dijkstra, t_dnode *dnode);
+void				add_updated_dnode(t_dijkstra *dijkstra, t_dnode *dnode);
 
 #endif
