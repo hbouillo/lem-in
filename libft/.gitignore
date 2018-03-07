@@ -1,12 +1,9 @@
-tests/
-lib/
-
 # Prerequisites
 *.d
 
 # Object files
 *.o
-*.k
+*.ko
 *.obj
 *.elf
 
@@ -32,7 +29,6 @@ lib/
 *.dylib
 
 # Executables
-lem-in-*
 *.exe
 *.out
 *.app
