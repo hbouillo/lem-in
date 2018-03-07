@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 03:36:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 05:16:32 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 04:53:40 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ static void			add_subgraph_dnode(t_dijkstra *dijkstra, t_dnode *dnode)
 	ft_llist_front(&dijkstra->subgraph, ft_llist_new(dnode));
 }
 
-static void			update_node(t_dijkstra *dijkstra)
+static void			update_node(t_dijkstra *dijkstra, int max_dist)
 {
 	t_dnode			*to_update;
 	t_dnode			*tmp_dnode;
 	int				i;
 
 	to_update = (t_dnode *)dijkstra->subgraph->data;
+	if (max_dist > 1 && to_update->dist >= max_dist)
+		return;
 	i = -1;
 	while (++i < to_update->node->connections)
 	{
@@ -72,7 +74,8 @@ static t_dnode		*select_node(t_dijkstra *dijkstra)
 	return (dnode);
 }
 
-int					find_shortest_path(t_path *path, t_network *network)
+int					find_shortest_path(t_path *path, t_network *network,
+						int max_length)
 {
 	t_dijkstra		dijkstra;
 	t_dnode			*tmp;
@@ -90,14 +93,13 @@ int					find_shortest_path(t_path *path, t_network *network)
 		tmp = select_node(&dijkstra);
 		if (!tmp)
 		{
-			verbose("Couldn't find any path.\n");
+			sverbose("No more path could be found.\n");
 			return (0);
 		}
 		add_subgraph_dnode(&dijkstra, tmp);
-		update_node(&dijkstra);
+		update_node(&dijkstra, max_length);
 	}
 	extract_path(dijkstra, path);
-	verbose("Found shortest path.\n");
 	free_dijkstra(dijkstra);
 	return (1);
 }

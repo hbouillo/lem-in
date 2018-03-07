@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/06 06:59:19 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/07 04:42:37 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # define ERR_WARNING "Warning", 0
 
 # define ARG_VERBOSE 0
+# define ARG_PRINT 1
+# define ARG_MAX_PATHS 2
+# define ARG_MAX_LENGTH 3
 
 # define V_COLOR 0x1c6f93
 
@@ -127,13 +130,14 @@ typedef struct		s_path
 int					error(int errcode, char const *const errmsg, char *errtype,
 						int errexit);
 int					verbose(char *str, ...);
+int					sverbose(char *str, ...);
 void				verbose_path(t_path path);
 
 t_data				*parse_data(void);
 
 t_network			*build_network(t_data *data);
 
-t_path				*solve(t_network *network);
+t_path				*solve(t_network *network, int max_paths, int max_length);
 
 void				run_ants(int ants, t_path *paths);
 
