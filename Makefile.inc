@@ -10,7 +10,7 @@ override MODE = NORMAL
 endif
 export MODE
 ifeq ($(MODE),DEBUG)
-DEBUG_FLAGS = -fsanitize=address
+DEBUG_FLAGS = -fsanitize=address -g
 else
 DEBUG_FLAGS = -Wall -Werror -Wextra
 endif

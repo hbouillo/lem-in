@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/13 00:00:22 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 20:26:02 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct		s_room
 {
 	int				id;
 	char			*name;
-	long			name_hash;
+	unsigned long	name_hash;
 	t_pos			pos;
 }					t_room;
 
@@ -145,7 +145,7 @@ void				run_ants(int ants, t_path *paths);
 void				free_room(void *room);
 void				free_tube(void *room);
 
-long				djb2(char const *str);
+unsigned long		djb2(char const *str);
 
 void				free_data(t_data *data);
 void				free_network(t_network *network);

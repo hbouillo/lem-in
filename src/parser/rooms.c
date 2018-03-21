@@ -6,17 +6,17 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 03:59:29 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:45:27 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 20:26:25 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./parser.h"
 
-t_room			*find_room(char *name, t_data *data)
+t_room					*find_room(char *name, t_data *data)
 {
-	t_llist		*rooms;
-	t_room		*room;
-	long		name_hash;
+	t_llist				*rooms;
+	t_room				*room;
+	unsigned long		name_hash;
 
 	name_hash = djb2(name);
 	rooms = data->hash_rooms[name_hash % ROOM_LISTS];
@@ -30,9 +30,9 @@ t_room			*find_room(char *name, t_data *data)
 	return (NULL);
 }
 
-int				parse_room(char **split, t_data *data, t_cdata *cdata)
+int						parse_room(char **split, t_data *data, t_cdata *cdata)
 {
-	t_room		*room;
+	t_room				*room;
 
 	if (!(room = (t_room *)malloc(sizeof(t_room))))
 		error(ERR_MALLOC, ERR_CRITICAL);
@@ -56,9 +56,9 @@ int				parse_room(char **split, t_data *data, t_cdata *cdata)
 	return (0);
 }
 
-void			free_room(void *room_ptr)
+void					free_room(void *room_ptr)
 {
-	t_room		*room;
+	t_room				*room;
 
 	room = (t_room *)room_ptr;
 	if (!room)
