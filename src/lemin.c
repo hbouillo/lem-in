@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:24:35 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 06:10:08 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 17:25:23 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void			check_data(t_data *data)
 		error(ERR_NO_END_NODE, ERR_CRITICAL);
 }
 
-void			lemin(int max_paths, int max_ants)
+void			lemin(int max_paths, int max_length)
 {
 	t_data		*data;
 	t_network	*network;
@@ -58,11 +58,26 @@ void			lemin(int max_paths, int max_ants)
 Node Name(%s) is exit.\n", network->nodes_count, network->entry->name,
 		network->exit->name);
 	sverbose("%rgbSolving...\n%0rgb", V_COLOR);
-	paths = solve(network, max_paths, max_ants);
+	paths = solve(network, max_paths, max_length);
 	sverbose("%rgbDone.\n%0rgb", V_COLOR);
 	free_network(network);
 	run_ants(ants, paths);
 	free_paths(paths);
+}
+
+static int		usage(void)
+{
+	ft_putstr("Usage: lem-in [--verbose] [--print] [--max-paths n] \
+[--max-path-length l]\n");
+	ft_putstr("\t--print (-p): Starts lem-in in print mode. \
+Shows only major steps.\n");
+	ft_putstr("\t--verbose (-v): Starts lem-in in verbose mode. \
+Shows every step lem-in does.\n");
+	ft_putstr("\t--max-paths n (-n n): Lem-in won't search more than n paths. \
+By default, no limit is set.\n");
+	ft_putstr("\t--max-path-length l (-l l): Lem-in won't search paths longer \
+than l nodes. By default, no limit is set.\n");
+	return (1);
 }
 
 int				main(int argc, char **argv)
@@ -77,10 +92,7 @@ int				main(int argc, char **argv)
 	register_arg_ref("max-paths", 'n', 1, ARG_MAX_PATHS);
 	register_arg_ref("max-path-length", 'l', 1, ARG_MAX_LENGTH);
 	if (parse_args(argc, argv))
-	{
-		ft_putstr("Usage: lem-in [-v]\n");
-		return (1);
-	}
+		return (usage());
 	if (get_arg(ARG_MAX_PATHS))
 		max_paths = ft_nbrmax(ft_atoi(get_arg(ARG_MAX_PATHS)->data[0]), 0);
 	if (get_arg(ARG_MAX_LENGTH))

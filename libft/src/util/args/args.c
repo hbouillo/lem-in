@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 20:44:26 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 04:48:25 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 17:17:24 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ t_args				**get_args(void)
 {
 	static t_args	*args;
 
-	if (!args)
-		args = (t_args *)ft_memalloc(sizeof(t_args));
+	if (!args && !(args = (t_args *)ft_memalloc(sizeof(t_args))))
+		exit(1);
 	return (&args);
 }
 
@@ -28,7 +28,8 @@ void				register_arg_ref(char *name, char short_name,
 	t_refarg		*refarg;
 	t_refarg		*tmp;
 
-	refarg = (t_refarg *)ft_memalloc(sizeof(t_refarg));
+	if (!(refarg = (t_refarg *)ft_memalloc(sizeof(t_refarg))))
+		exit(1);
 	refarg->idx = idx;
 	refarg->name = ft_strdup(name);
 	refarg->short_name = short_name;
@@ -75,9 +76,12 @@ static int			parse_one_arg(char **argv, int argc, int i)
 		: find_refarg(argv[i] + 1, ARG_SHORT_NAME);
 	if (!refarg || (int)refarg->data_len + i >= argc)
 		return (1);
-	arg = (t_arg *)ft_memalloc(sizeof(t_arg));
+	if (!(arg = (t_arg *)ft_memalloc(sizeof(t_arg))))
+		exit(1);
 	arg->idx = refarg->idx;
-	arg->data = (char **)ft_memalloc(sizeof(char *) * (refarg->data_len + 1));
+	if (!(arg->data = (char **)ft_memalloc(
+		sizeof(char *) * (refarg->data_len + 1))))
+		exit(1);
 	j = -1;
 	while (++j < (int)refarg->data_len)
 		arg->data[j] = ft_strdup(argv[i + j + 1]);
@@ -94,12 +98,13 @@ int					parse_args(int argc, char **argv)
 	int				i;
 
 	i = 0;
-	(*get_args())->args = (t_arg *)ft_memalloc(sizeof(t_arg));
+	if (!((*get_args())->args = (t_arg *)ft_memalloc(sizeof(t_arg))))
+		exit(1);
 	(*get_args())->args->idx = ARG_DEFAULT;
-	(*get_args())->args->data = (char **)ft_memalloc(sizeof(char *) * 2);
+	if (!((*get_args())->args->data = (char **)ft_memalloc(sizeof(char *) * 2)))
+		exit(1);
 	(*get_args())->args->data[0] = ft_strnew(0);
 	while (++i < argc)
-	{
 		if (argv[i][0] == '-')
 		{
 			if (parse_one_arg(argv, argc, i))
@@ -113,6 +118,5 @@ int					parse_args(int argc, char **argv)
 			(*get_args())->args->data[0] =
 				ft_strfjoin((*get_args())->args->data[0], ft_strdup(argv[i]));
 		}
-	}
 	return (0);
 }

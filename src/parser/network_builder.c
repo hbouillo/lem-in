@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/03 04:26:10 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:53:12 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 16:46:29 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,17 @@ static int			build_nodes(t_network *network, t_data const *const data)
 	t_llist			*rooms;
 	t_room			*room;
 
-	network->nodes = (t_node **)ft_memalloc(
-		sizeof(t_node *) * (data->rooms_count + 1));
+	if (!(network->nodes = (t_node **)ft_memalloc(
+		sizeof(t_node *) * (data->rooms_count + 1))))
+		exit(1);
 	network->nodes_count = data->rooms_count;
 	rooms = data->rooms;
 	while (rooms)
 	{
 		room = ((t_room *)rooms->data);
-		network->nodes[room->id] = (t_node *)ft_memalloc(sizeof(t_node));
-		network->nodes[room->id]->name = ft_strdup(room->name);
+		if (!(network->nodes[room->id] = (t_node *)ft_memalloc(sizeof(t_node)))
+			|| !(network->nodes[room->id]->name = ft_strdup(room->name)))
+			exit(1);
 		network->nodes[room->id]->pos = room->pos;
 		network->nodes[room->id]->id = room->id;
 		if (room->id == data->start->id)
@@ -52,8 +54,9 @@ static int			link_nodes(t_network *network, t_data *data)
 	{
 		tlist = data->tubes;
 		(*nodes)->connections = data->id_tubes_count[(*nodes)->id];
-		(*nodes)->nodes = (t_node **)ft_memalloc(
-			sizeof(t_node *) * ((*nodes)->connections + 1));
+		if (!((*nodes)->nodes = (t_node **)ft_memalloc(
+			sizeof(t_node *) * ((*nodes)->connections + 1))))
+			exit(1);
 		fill_connections(*nodes, network->nodes, data);
 		remove_double_links(*nodes);
 		i = -1;
@@ -70,7 +73,8 @@ t_network			*build_network(t_data *data)
 	t_node			**nodes_tmp;
 	int				nodes;
 
-	net = (t_network *)ft_memalloc(sizeof(t_network));
+	if (!(net = (t_network *)ft_memalloc(sizeof(t_network))))
+		exit(1);
 	build_nodes(net, data);
 	link_nodes(net, data);
 	nodes_tmp = net->nodes - 1;

@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:28:07 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:43:13 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 16:49:37 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ t_data			*parse_data(void)
 	int			parsed_ants;
 	char		*line;
 
-	data = (t_data *)ft_memalloc(sizeof(t_data));
+	if (!(data = (t_data *)ft_memalloc(sizeof(t_data))))
+		exit(1);
 	parsed_ants = 0;
 	while (ft_gnl(0, &line) > 0)
 	{

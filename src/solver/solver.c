@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/03 02:54:41 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 05:20:13 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/21 17:26:04 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_path			*solve(t_network *network, int max_paths_param, int max_length)
 		max_paths = ft_nbrmin(max_paths, max_paths_param);
 		sverbose("Restricting maximum paths to %d.\n", max_paths);
 	}
+	if (max_length)
+		sverbose("Restricting maximum path length to %d.\n", max_length);
 	if (!(paths = (t_path *)ft_memalloc(sizeof(t_path) * (max_paths + 1))))
 		error(ERR_MALLOC, ERR_CRITICAL);
 	paths_found = -1;
