@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/30 19:25:25 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/21 20:26:02 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/28 18:03:21 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define ERR_FORMAT_UNKNOWN 20,"Unknown line format."
 # define ERR_FORMAT_ROOM 21,"Unknown room line format."
 # define ERR_FORMAT_TUBE 22,"Unknown tube line format."
+# define ERR_NO_SOLUTION 42,"No solution has been found."
 
 # define ERR_CRITICAL "Error", 1
 # define ERR_WARNING "Warning", 0

@@ -6,7 +6,7 @@
 /*   By: hbouillo <hbouillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 04:49:11 by hbouillo          #+#    #+#             */
-/*   Updated: 2018/03/07 04:49:33 by hbouillo         ###   ########.fr       */
+/*   Updated: 2018/03/28 18:04:18 by hbouillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void			run_ants(int ants, t_path *paths)
 
 	paths_count = count_paths(paths);
 	if (!paths_count)
-		return ;
+	{
+		ft_putchar('\n');
+		error(ERR_NO_SOLUTION, ERR_CRITICAL);
+	}
 	keep = 1;
 	cycles = 1;
 	while (keep)
