@@ -60,7 +60,7 @@ room_1-room_2
 
 #### Command
 
-Any line that starts with two **'#' is a  ***command***. lem-in only interprets two commands: **'##start'** and '##end'. A map without one of those commands will result in an error. They must be located before a valid ***room descriptor***. Any other command will be ignored and printed back on the output for more processing.
+Any line that starts with two **'#'** is a  ***command***. lem-in only interprets two commands: **'##start'** and **'##end'**. A map without one of those commands will result in an error. They must be located before a valid ***room descriptor***. Any other command will be ignored and printed back on the output for more processing.
 
 ```
 ##start
