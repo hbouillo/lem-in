@@ -6,7 +6,7 @@ In brief, the project consists in running a certain amount of 'ants' in the fast
 
 ## Getting Started
 
-This project has only been compiled and tested on ***macOS Sierra (10.12.6)***. A few modifications might be necessary to compile it on any other system.
+This project has only been compiled and tested on **macOS Sierra (10.12.6)**. A few modifications might be necessary to compile it on any other system.
 
 ### Installing
 
