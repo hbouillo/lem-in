@@ -50,7 +50,7 @@ A ***room descriptor*** is a line with 3 fields separated by a space **' '**. Th
 room_name x y
 ```
 
-#### Room
+#### Tube
 
 A ***tube descriptor*** is a line with 2 fields separated by a dash **'-'**. Each field must be the name of a valid room.
 
