@@ -69,11 +69,10 @@ room_1 0 0
 
 #### Comment
 
-Any line that starts with one **'#'** is a  ***command***. Any comment will be ignored and printed back on the output.
+Any line that starts with one **'#'** is a  ***comment***. Any comment will be ignored and printed back on the output.
 
 ```
-##start
-room_1 0 0
+#comment
 ```
 
 ### Result (output)
